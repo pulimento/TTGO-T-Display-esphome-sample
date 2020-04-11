@@ -1,0 +1,55 @@
+font:
+  - file: 'slkscr.ttf'
+    id: font_slkscr_8
+    size: 8
+  - file: 'BebasNeue-Regular.ttf'
+    id: font_bebas_48
+    size: 48
+  - file: 'BebasNeue-Regular.ttf'
+    id: font_bebas_56
+    size: 56
+  - file: 'arial.ttf'
+    id: font_arial_12
+    size: 12
+
+# COLORS ARE IN RGB565 format
+globals:
+  - id: color_red
+    type: int
+    restore_value: no
+    initial_value: '0xF800'  
+  - id: color_green
+    type: int
+    restore_value: no
+    initial_value: '0x07E0'
+  - id: color_blue
+    type: int
+    restore_value: no
+    initial_value: '0x001F'
+  - id: color_yellow
+    type: int
+    restore_value: no
+    initial_value: '0xFFE0'
+  - id: color_yellow_alt
+    type: int
+    restore_value: no
+    initial_value: '0xFE40'
+  - id: color_cyan
+    type: int
+    restore_value: no
+    initial_value: '0x07FF'
+  - id: color_orange
+    type: int
+    restore_value: no
+    initial_value: '0xFC20'
+  - id: color_teal_blue
+    type: int
+    restore_value: no
+    initial_value: '0x04AE'
+  - id: color_beige
+    type: int
+    restore_value: no
+    initial_value: '0xFFBD'
+
+
+    
