@@ -2,6 +2,7 @@ font:
   - file: 'fonts\slkscr.ttf'
     id: font_slkscr_8
     size: 8
+    glyphs: "!%()+,-/_.:°0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz"
   - file: 'fonts\BebasNeue-Regular.ttf'
     id: font_bebas_48
     size: 48

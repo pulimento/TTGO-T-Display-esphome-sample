@@ -40,6 +40,32 @@ binary_sensor:
     entity_id: switch.termo
     id: termo_state
 
+  - platform: gpio
+    pin:
+      number: 35
+      mode: INPUT_PULLUP
+      inverted: true
+    id: ttgo_gpio35
+    on_click:
+      then:
+        - homeassistant.service:
+            service: switch.toggle
+            data:
+              entity_id: switch.tasmota
+
+  - platform: gpio
+    pin:
+      number: 0
+      mode: INPUT_PULLUP
+      inverted: true
+    id: ttgo_gpio0
+    on_click:
+      then:
+        - homeassistant.service:
+            service: switch.toggle
+            data:
+              entity_id: switch.termo
+
 sensor:
   - platform: homeassistant
     id: termo_power
@@ -68,6 +94,7 @@ sensor:
       // I know infering the battery from voltage only is misleading, but I'll take it. Considering linear decay (again, i'll take it), max=2.23, min=1.38
       return ((id(vcc).state * 118) - 162);
 
+# TODO brightness
 display:
   - platform: st7789v
     reset_pin: 23
@@ -79,8 +106,10 @@ display:
     update_interval: 5s
     lambda: |-
       if (id(vcc).has_state()) {
-         it.printf(4, 4, id(font_arial_12), id(color_teal_blue), "%.2f VBat (%.2f %%)", id(vcc).state, id(batterylevel).state);
+        it.printf(4, 4, id(font_arial_12), id(color_teal_blue), "%.2f VBat (%.2f %%)", id(vcc).state, id(batterylevel).state);
       }
+      it.print(212, 4, id(font_slkscr_8), id(color_teal_blue), "PLUG");
+      it.print(210, 120, id(font_slkscr_8), id(color_teal_blue), "TERMO");
 
       if(id(termo_state).has_state()) {
         if (id(termo_state).state) {
@@ -97,5 +126,5 @@ display:
         } else {
           it.printf(16, 72, id(font_bebas_56), id(color_green), "%.1f W", id(termo_power).state);
         }        
-      } 
-
+      }
+     
