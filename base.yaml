@@ -1,14 +1,14 @@
 font:
-  - file: 'slkscr.ttf'
+  - file: 'fonts\slkscr.ttf'
     id: font_slkscr_8
     size: 8
-  - file: 'BebasNeue-Regular.ttf'
+  - file: 'fonts\BebasNeue-Regular.ttf'
     id: font_bebas_48
     size: 48
-  - file: 'BebasNeue-Regular.ttf'
+  - file: 'fonts\BebasNeue-Regular.ttf'
     id: font_bebas_56
     size: 56
-  - file: 'arial.ttf'
+  - file: 'fonts\arial.ttf'
     id: font_arial_12
     size: 12
 
