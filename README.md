@@ -25,7 +25,7 @@ Currently, it uses custom components from [musk95](https://github.com/musk95/esp
 
 ## Future ideas in mind
 
-- Underclock ESP?
-- Power off screen
+- Underclock ESP? Possible from C++. ESP32.cpp, ESP.getCpuFreqMHz(). Could also be set.
+- Power off screen (viewing [this PR](https://github.com/esphome/esphome/pull/918/files), it would be possible to digitally disable the backlight
 - Pages
 - Report battery correctly when charging
