@@ -1,9 +1,69 @@
 esphome:
   name: ttg
   platform: ESP32
-  board: esp32dev
+  board: featheresp32
 
-<<: !include base.yaml
+
+#####<<: !include base.yaml
+
+
+font:
+  - file: 'fonts\slkscr.ttf'
+    id: font_slkscr_8
+    size: 8
+    glyphs: "!%()+,-/_.:°0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz"
+  - file: 'fonts\BebasNeue-Regular.ttf'
+    id: font_bebas_48
+    size: 48
+  - file: 'fonts\BebasNeue-Regular.ttf'
+    id: font_bebas_56
+    size: 56
+  - file: 'fonts\arial.ttf'
+    id: font_arial_12
+    size: 12
+
+# COLORS ARE IN RGB565 format
+globals:
+  - id: color_red
+    type: int
+    restore_value: no
+    initial_value: '0xF800'  
+  - id: color_green
+    type: int
+    restore_value: no
+    initial_value: '0x07E0'
+  - id: color_blue
+    type: int
+    restore_value: no
+    initial_value: '0x001F'
+  - id: color_yellow
+    type: int
+    restore_value: no
+    initial_value: '0xFFE0'
+  - id: color_yellow_alt
+    type: int
+    restore_value: no
+    initial_value: '0xFE40'
+  - id: color_cyan
+    type: int
+    restore_value: no
+    initial_value: '0x07FF'
+  - id: color_orange
+    type: int
+    restore_value: no
+    initial_value: '0xFC20'
+  - id: color_teal_blue
+    type: int
+    restore_value: no
+    initial_value: '0x04AE'
+  - id: color_beige
+    type: int
+    restore_value: no
+    initial_value: '0xFFBD'
+
+
+
+#########
 
 wifi:
   ssid: !secret wifi_ssid
@@ -27,8 +87,8 @@ ota:
 ### CUSTOM!!
 
 spi:
-  clk_pin: 18
-  mosi_pin: 19
+  clk_pin: GPIO18
+  mosi_pin: GPIO19
 
 time:
   - platform: homeassistant
@@ -36,16 +96,14 @@ time:
 
 binary_sensor:
   - platform: homeassistant
-    #name: "Input Boolean From Home Assistant"
     entity_id: switch.termo
     id: termo_state
 
   - platform: gpio
     pin:
-      number: 35
-      mode: INPUT_PULLUP
+      number: GPIO35
       inverted: true
-    id: ttgo_gpio35
+    id: tdisplay_button_input_1
     on_click:
       then:
         - homeassistant.service:
@@ -55,10 +113,9 @@ binary_sensor:
 
   - platform: gpio
     pin:
-      number: 0
-      mode: INPUT_PULLUP
+      number: GPIO0
       inverted: true
-    id: ttgo_gpio0
+    id: tdisplay_button_input_0
     on_click:
       then:
         - homeassistant.service:
@@ -66,17 +123,26 @@ binary_sensor:
             data:
               entity_id: switch.termo
 
+  - platform: status
+    name: "Node Status"
+    id: system_status              
+
+# We can still control the backlight independently
+switch:
+  - platform: gpio
+    pin: GPIO4
+    name: "Backlight"
+    id: backlight              
+
 sensor:
   - platform: homeassistant
     id: termo_power
     entity_id: sensor.termo_energy_power
     unit_of_measurement: 'W'
-    #internal: true
   - platform: homeassistant
     id: termo_voltage
     unit_of_measurement: 'V'
     entity_id: sensor.termo_energy_voltage
-    #internal: true
 
   - platform: adc
     pin: 34
@@ -92,15 +158,15 @@ sensor:
     update_interval: 60s
     lambda: |-
       // I know infering the battery from voltage only is misleading, but I'll take it. Considering linear decay (again, i'll take it), max=2.23, min=1.38
-      return ((id(vcc).state * 118) - 162);
+      return ((id(vcc).state * 118) - 162);   
 
 # TODO brightness
 display:
   - platform: st7789v
-    reset_pin: 23
-    bl_pin: 4
-    cs_pin: 5
-    dc_pin: 16
+    backlight_pin: GPIO4
+    cs_pin: GPIO5
+    dc_pin: GPIO16
+    reset_pin: GPIO23
     rotation: 90°
     #brightness: 0.5
     update_interval: 5s
