@@ -1,0 +1,24 @@
+-------------------- Auto-Git Log --------------------
+		Fri May 22 2020 18:50:46 GMT+0200 (hora de verano de Europa central)
+------------------------------------------------------
+
+Modified files:
+* ttg.yaml
+
+
+Created files:
+
+
+Deleted files:
+* custom_components/display/__init__.py
+* custom_components/display/display_buffer.cpp
+* custom_components/display/display_buffer.h
+* custom_components/image/__init__.py
+* custom_components/st7789v/__init__.py
+* custom_components/st7789v/display.py
+* custom_components/st7789v/st7789v.cpp
+* custom_components/st7789v/st7789v.h
+* ttg/partitions.csv
+
+
+Renamed files:

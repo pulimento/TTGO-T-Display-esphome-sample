@@ -1,0 +1,120 @@
+esphome:
+  name: ttg
+  platform: ESP32
+  board: featheresp32
+
+#####<<: !include base.yaml
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_pass
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Ttg Fallback Hotspot"
+    password: "zvmjI13rzTGs"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+### CUSTOM!!
+
+spi:
+  clk_pin: GPIO18
+  mosi_pin: GPIO19
+
+time:
+  - platform: homeassistant
+    id: esptime
+
+binary_sensor:
+
+  - platform: gpio
+    pin:
+      number: GPIO35
+      inverted: true
+    id: tdisplay_button_input_1
+    on_click:
+      then:
+        - homeassistant.service:
+            service: switch.toggle
+            data:
+              entity_id: switch.tasmota
+
+  - platform: gpio
+    pin:
+      number: GPIO0
+      inverted: true
+    id: tdisplay_button_input_0
+    on_click:
+      then:
+        - homeassistant.service:
+            service: switch.toggle
+            data:
+              entity_id: switch.termo
+
+  - platform: status
+    name: "Node Status"
+    id: system_status              
+
+# We can still control the backlight independently
+switch:
+  - platform: gpio
+    pin: GPIO4
+    name: "Backlight"
+    id: backlight              
+
+sensor:
+
+  - platform: adc
+    pin: 34
+    attenuation: 11db
+    name: VBatt
+    id: vcc
+    update_interval: 60s
+
+  - platform: template
+    name: batterylevel
+    id: batterylevel
+    unit_of_measurement: '%'
+    update_interval: 60s
+    lambda: |-
+      // I know infering the battery from voltage only is misleading, but I'll take it. Considering linear decay (again, i'll take it), max=2.23, min=1.38
+      return ((id(vcc).state * 118) - 162);
+
+# TODO brightness
+#display:
+#  - platform: st7789v
+#    backlight_pin: GPIO4
+#    cs_pin: GPIO5
+#    dc_pin: GPIO16
+#    reset_pin: GPIO23
+#    rotation: 90°
+#    #brightness: 0.5
+#    update_interval: 5s
+#    lambda: |-
+#      if (id(vcc).has_state()) {
+#        it.printf(4, 4, id(font_arial_12), id(color_teal_blue), "%.2f VBat (%.2f %%)", id(vcc).state, id(batterylevel).state);
+#      }
+#      it.print(212, 4, id(font_bebas_56), id(color_teal_blue), "WS2812B");
+
+light:
+  - platform: fastled_clockless
+    chipset: WS2812B
+    pin: GPIO17
+    num_leds: 21
+    rgb_order: GRB
+    name: "FastLED WS2811 Light"
+    effects:
+      - addressable_rainbow:
+      - addressable_rainbow:
+          name: Rainbow Effect With Custom Values
+          speed: 10
+

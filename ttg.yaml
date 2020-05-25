@@ -63,6 +63,17 @@ globals:
 
 
 
+# OPTIONAL: Another way to set colors
+substitutions:
+  RED: '(0x1F << 11)'
+  GREEN: '(0x3F << 5)'
+  BLUE: '(0x1F << 0)'
+  YELLOW: '(0x1F << 11) | (0x3F << 5)'
+  CYAN: '(0x3F << 5) | (0x1F << 0)'
+  MAGENTA: '(0x1F << 11) | (0x1F << 0)'
+  WHITE: '(0x1F << 11) | (0x3F << 5) | (0x1F << 0)'
+  GRAY: '(0x10 << 11) | (0x20 << 5) | (0x10 << 0)'
+
 #########
 
 wifi:

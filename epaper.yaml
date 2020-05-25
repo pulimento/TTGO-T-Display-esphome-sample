@@ -1,0 +1,81 @@
+esphome:
+  name: wemoslite
+  platform: ESP32
+  board: wemos_d1_mini32
+
+#####<<: !include base.yaml
+
+font:
+  - file: 'fonts\slkscr.ttf'
+    id: font_slkscr_8
+    size: 8
+    glyphs: "!%()+,-/_.:°0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz"
+  - file: 'fonts\BebasNeue-Regular.ttf'
+    id: font_bebas_16
+    size: 16
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_pass
+  ap:
+    ssid: "Ttg Fallback Hotspot"
+    password: "zvmjI13rzTGs"
+
+captive_portal:
+
+logger:
+
+ota:
+
+### CUSTOM!!
+
+# Example configuration entry
+spi:
+  clk_pin: D23
+  mosi_pin: D19
+
+display:
+  - platform: waveshare_epaper
+    cs_pin: D18
+    dc_pin: D5
+    #busy_pin: GPIO33
+    reset_pin: D17
+    model: 1.54in
+    full_update_every: 10
+    lambda: |-
+      it.print(0, 0, id(font_slkscr_8), "Hello World!");
+      it.print(40, 0, id(font_bebas_16), "Hello World!");
+      it.print(0, 40, id(font_slkscr_8), "Hello World!");
+
+         
+
+
+# TODO brightness
+#display:
+#  - platform: st7789v
+#    backlight_pin: GPIO4
+#    cs_pin: GPIO5
+#    dc_pin: GPIO16
+#    reset_pin: GPIO23
+#    rotation: 90°
+#    #brightness: 0.5
+#    update_interval: 5s
+#    lambda: |-
+#      if (id(vcc).has_state()) {
+#        it.printf(4, 4, id(font_arial_12), id(color_teal_blue), "%.2f VBat (%.2f %%)", id(vcc).state, id(batterylevel).state);
+#      }
+#      it.print(212, 4, id(font_bebas_56), id(color_teal_blue), "WS2812B");
+
+#light:
+#  - platform: fastled_clockless
+#    chipset: WS2812B
+#    pin: GPIO17
+#    num_leds: 21
+#    rgb_order: GRB
+#    name: "FastLED WS2811 Light"
+#    effects:
+#      - addressable_rainbow:
+#      - addressable_rainbow:
+#          name: Rainbow Effect With Custom Values
+#          speed: 10
+
