@@ -1,0 +1,16 @@
+-------------------- Auto-Git Log --------------------
+		Tue May 26 2020 08:32:30 GMT+0200 (hora de verano de Europa central)
+------------------------------------------------------
+
+Modified files:
+* epaper.yaml
+
+
+Created files:
+* .autogit/logs/log-25-4-2020-23-52-55.txt
+
+
+Deleted files:
+
+
+Renamed files:
