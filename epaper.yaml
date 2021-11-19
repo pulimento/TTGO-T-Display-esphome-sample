@@ -1,33 +1,54 @@
 esphome:
-  name: wemoslite
+  name: board1
   platform: ESP32
   board: esp32dev
 
-#####<<: !include base.yaml
+<<: !include base.yaml
 
-font:
-  - file: 'fonts\slkscr.ttf'
-    id: font_slkscr_8
-    size: 8
-    glyphs: "!%()+,-/_.:°0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz"
-  - file: 'fonts\BebasNeue-Regular.ttf'
-    id: font_bebas_16
-    size: 16
-
-#wifi:
-#  ssid: !secret wifi_ssid
-#  password: !secret wifi_pass
-#  ap:
-#    ssid: "Ttg Fallback Hotspot"
-#    password: "zvmjI13rzTGs"
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_pass
+  ap:
+    ssid: "Ttg Fallback Hotspot"
+    password: "zvmjI13rzTGs"
 
 #captive_portal:
 
 logger:
 
-#ota:
+ota:
+
+# Enable Home Assistant API
+api:
 
 ### CUSTOM!!
+
+binary_sensor:
+  - platform: homeassistant
+    entity_id: switch.tasmota_2
+    id: plug_204_state
+
+  #- platform: gpio
+  #  pin:
+  #    number: GPIO9
+  #    inverted: true
+  #  id: esp32_button_input_0
+  #  on_click:
+  #    then:
+  #      - homeassistant.service:
+  #          service: switch.toggle
+  #          data:
+  #            entity_id: switch.tasmota_2
+
+sensor:
+  - platform: homeassistant
+    id: plug_204_power
+    entity_id: sensor.tasmota_energy_power_2
+    unit_of_measurement: 'W'
+  - platform: homeassistant
+    id: plug_204_voltage
+    unit_of_measurement: 'V'
+    entity_id: sensor.tasmota_energy_voltage_2
 
 # Example configuration entry
 spi:
@@ -40,54 +61,27 @@ display:
     dc_pin: GPIO5
     busy_pin: GPIO16
     reset_pin: GPIO17
-    model: 1.54in
+    model: 1.54inv2
+    rotation: 90°
+    update_interval: 10s
     lambda: |-
 
+      it.print(0,0,id(font_arial_12), "Hello!!!!!");
 
-      // Draw a line from [0,0] to [100,50]
-      it.line(0, 0, 100, 50);
-      // Draw the outline of a rectangle with the top left at [50,60], a width of 30 and a height of 42
-      it.rectangle(50, 60, 30, 42);
-      // Draw the same rectangle, but this time filled.
-      it.filled_rectangle(50, 60, 30, 42);
+      if(id(plug_204_state).has_state()) {
+        if (id(plug_204_state).state) {
+          it.print(16, 18, id(font_bebas_56), "TV CAMA: ON");
+        } else {
+          it.print(16, 18, id(font_bebas_56), "TV CAMA: OFF");
+        }
+      }
 
-      // Circles! Let's draw one with the center at [25,25] and a radius of 10
-      it.circle(25, 25, 10);
-      // ... and the same thing filled again
-      it.filled_circle(25, 25, 10);
-
-      it.print(0, 0, id(font_slkscr_8), "Hello World!");
-      it.print(40, 0, id(font_bebas_16), "Hello World!");
-      it.print(0, 40, id(font_slkscr_8), "Hello World!");
-         
-
-
-# TODO brightness
-#display:
-#  - platform: st7789v
-#    backlight_pin: GPIO4
-#    cs_pin: GPIO5
-#    dc_pin: GPIO16
-#    reset_pin: GPIO23
-#    rotation: 90°
-#    #brightness: 0.5
-#    update_interval: 5s
-#    lambda: |-
-#      if (id(vcc).has_state()) {
-#        it.printf(4, 4, id(font_arial_12), id(color_teal_blue), "%.2f VBat (%.2f %%)", id(vcc).state, id(batterylevel).state);
-#      }
-#      it.print(212, 4, id(font_bebas_56), id(color_teal_blue), "WS2812B");
-
-#light:
-#  - platform: fastled_clockless
-#    chipset: WS2812B
-#    pin: GPIO17
-#    num_leds: 21
-#    rgb_order: GRB
-#    name: "FastLED WS2811 Light"
-#    effects:
-#      - addressable_rainbow:
-#      - addressable_rainbow:
-#          name: Rainbow Effect With Custom Values
-#          speed: 10
+      if (id(plug_204_power).has_state()) {
+        float pwr = id(plug_204_power).state;
+        if (pwr > 10.0) {
+          it.printf(16, 72, id(font_bebas_56), "%.1f W", id(plug_204_power).state);
+        } else {
+          it.printf(16, 72, id(font_bebas_56), "%.1f W", id(plug_204_power).state);
+        }        
+      }        
 
