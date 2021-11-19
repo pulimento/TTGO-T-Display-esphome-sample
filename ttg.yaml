@@ -3,78 +3,7 @@ esphome:
   platform: ESP32
   board: featheresp32
 
-
-#####<<: !include base.yaml
-
-
-font:
-  - file: 'fonts\slkscr.ttf'
-    id: font_slkscr_8
-    size: 8
-    glyphs: "!%()+,-/_.:°0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz"
-  - file: 'fonts\BebasNeue-Regular.ttf'
-    id: font_bebas_48
-    size: 48
-  - file: 'fonts\BebasNeue-Regular.ttf'
-    id: font_bebas_56
-    size: 56
-  - file: 'fonts\arial.ttf'
-    id: font_arial_12
-    size: 12
-
-# COLORS ARE IN RGB565 format
-globals:
-  - id: color_red
-    type: int
-    restore_value: no
-    initial_value: '0xF800'  
-  - id: color_green
-    type: int
-    restore_value: no
-    initial_value: '0x07E0'
-  - id: color_blue
-    type: int
-    restore_value: no
-    initial_value: '0x001F'
-  - id: color_yellow
-    type: int
-    restore_value: no
-    initial_value: '0xFFE0'
-  - id: color_yellow_alt
-    type: int
-    restore_value: no
-    initial_value: '0xFE40'
-  - id: color_cyan
-    type: int
-    restore_value: no
-    initial_value: '0x07FF'
-  - id: color_orange
-    type: int
-    restore_value: no
-    initial_value: '0xFC20'
-  - id: color_teal_blue
-    type: int
-    restore_value: no
-    initial_value: '0x04AE'
-  - id: color_beige
-    type: int
-    restore_value: no
-    initial_value: '0xFFBD'
-
-
-
-# OPTIONAL: Another way to set colors
-substitutions:
-  RED: '(0x1F << 11)'
-  GREEN: '(0x3F << 5)'
-  BLUE: '(0x1F << 0)'
-  YELLOW: '(0x1F << 11) | (0x3F << 5)'
-  CYAN: '(0x3F << 5) | (0x1F << 0)'
-  MAGENTA: '(0x1F << 11) | (0x1F << 0)'
-  WHITE: '(0x1F << 11) | (0x3F << 5) | (0x1F << 0)'
-  GRAY: '(0x10 << 11) | (0x20 << 5) | (0x10 << 0)'
-
-#########
+<<: !include base.yaml
 
 wifi:
   ssid: !secret wifi_ssid
@@ -107,8 +36,12 @@ time:
 
 binary_sensor:
   - platform: homeassistant
-    entity_id: switch.termo
-    id: termo_state
+    entity_id: switch.tasmota
+    id: plug_202_state
+
+  - platform: homeassistant
+    entity_id: switch.tasmota_2
+    id: plug_204_state
 
   - platform: gpio
     pin:
@@ -132,7 +65,7 @@ binary_sensor:
         - homeassistant.service:
             service: switch.toggle
             data:
-              entity_id: switch.termo
+              entity_id: switch.tasmota_2
 
   - platform: status
     name: "Node Status"
@@ -147,13 +80,21 @@ switch:
 
 sensor:
   - platform: homeassistant
-    id: termo_power
-    entity_id: sensor.termo_energy_power
+    id: plug_202_power
+    entity_id: sensor.tasmota_energy_power
     unit_of_measurement: 'W'
   - platform: homeassistant
-    id: termo_voltage
+    id: plug_202_voltage
     unit_of_measurement: 'V'
-    entity_id: sensor.termo_energy_voltage
+    entity_id: sensor.tasmota_energy_voltage
+  - platform: homeassistant
+    id: plug_204_power
+    entity_id: sensor.tasmota_energy_power_2
+    unit_of_measurement: 'W'
+  - platform: homeassistant
+    id: plug_204_voltage
+    unit_of_measurement: 'V'
+    entity_id: sensor.tasmota_energy_voltage_2
 
   - platform: adc
     pin: 34
@@ -185,23 +126,23 @@ display:
       if (id(vcc).has_state()) {
         it.printf(4, 4, id(font_arial_12), id(color_teal_blue), "%.2f VBat (%.2f %%)", id(vcc).state, id(batterylevel).state);
       }
-      it.print(212, 4, id(font_slkscr_8), id(color_teal_blue), "PLUG");
-      it.print(210, 120, id(font_slkscr_8), id(color_teal_blue), "TERMO");
+      it.print(212, 4, id(font_slkscr_8), id(color_teal_blue), "MICRO");
+      it.print(190, 120, id(font_slkscr_8), id(color_teal_blue), "TV CAMA");
 
-      if(id(termo_state).has_state()) {
-        if (id(termo_state).state) {
-          it.print(16, 18, id(font_bebas_56), id(color_green), "TERMO: ON");
+      if(id(plug_204_state).has_state()) {
+        if (id(plug_204_state).state) {
+          it.print(16, 18, id(font_bebas_56), id(color_green), "TV CAMA: ON");
         } else {
-          it.print(16, 18, id(font_bebas_56), id(color_red), "TERMO: OFF");
+          it.print(16, 18, id(font_bebas_56), id(color_red), "TV CAMA: OFF");
         }
       }
 
-      if (id(termo_power).has_state()) {
-        float pwr = id(termo_power).state;
+      if (id(plug_204_power).has_state()) {
+        float pwr = id(plug_204_power).state;
         if (pwr > 10.0) {
-          it.printf(16, 72, id(font_bebas_56), id(color_orange), "%.1f W", id(termo_power).state);
+          it.printf(16, 72, id(font_bebas_56), id(color_orange), "%.1f W", id(plug_204_power).state);
         } else {
-          it.printf(16, 72, id(font_bebas_56), id(color_green), "%.1f W", id(termo_power).state);
+          it.printf(16, 72, id(font_bebas_56), id(color_green), "%.1f W", id(plug_204_power).state);
         }        
       }
      

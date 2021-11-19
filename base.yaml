@@ -13,44 +13,65 @@ font:
     id: font_arial_12
     size: 12
 
-# COLORS ARE IN RGB565 format
-globals:
+color:
   - id: color_red
-    type: int
-    restore_value: no
-    initial_value: '0xF800'  
+    red: 1
+    green: 0
+    blue: 0
   - id: color_green
-    type: int
-    restore_value: no
-    initial_value: '0x07E0'
+    red: 0
+    green: 1
+    blue: 0
   - id: color_blue
-    type: int
-    restore_value: no
-    initial_value: '0x001F'
-  - id: color_yellow
-    type: int
-    restore_value: no
-    initial_value: '0xFFE0'
-  - id: color_yellow_alt
-    type: int
-    restore_value: no
-    initial_value: '0xFE40'
-  - id: color_cyan
-    type: int
-    restore_value: no
-    initial_value: '0x07FF'
+    red: 0
+    green: 0
+    blue: 1
   - id: color_orange
-    type: int
-    restore_value: no
-    initial_value: '0xFC20'
+    red: 1
+    green: 0.6
+    blue: 0
   - id: color_teal_blue
-    type: int
-    restore_value: no
-    initial_value: '0x04AE'
-  - id: color_beige
-    type: int
-    restore_value: no
-    initial_value: '0xFFBD'
+    red: 0
+    green: 0.5
+    blue: 0.45
 
-
+#### OLD WAY TO DEFINE COLORS AS INT
+# COLORS ARE IN RGB565 format
+#globals:
+#  - id: color_red
+#    type: int
+#    restore_value: no
+#    initial_value: '0xF800'  
+#  - id: color_green
+#    type: int
+#    restore_value: no
+#    initial_value: '0x07E0'
+#  - id: color_blue
+#    type: int
+#    restore_value: no
+#    initial_value: '0x001F'
+#  - id: color_yellow
+#    type: int
+#    restore_value: no
+#    initial_value: '0xFFE0'
+#  - id: color_yellow_alt
+#    type: int
+#    restore_value: no
+#    initial_value: '0xFE40'
+#  - id: color_cyan
+#    type: int
+#    restore_value: no
+#    initial_value: '0x07FF'
+#  - id: color_orange
+#    type: int
+#    restore_value: no
+#    initial_value: '0xFC20'
+#  - id: color_teal_blue
+#    type: int
+#    restore_value: no
+#    initial_value: '0x04AE'
+#  - id: color_beige
+#    type: int
+#    restore_value: no
+#    initial_value: '0xFFBD'
     
